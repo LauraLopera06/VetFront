@@ -3,6 +3,81 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Sede</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Sedes</h1>
+    <p>Crear, editar, actualizar y eliminar Sedes</p>
 </div>
+
+
+<div class="card">
+    <div class="card-header fw-bold">
+        Crear / Editar
+    </div>
+    <div class="card-body">
+        <form onsubmit="event.preventDefault(); guardarFormulario();">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group my-2">
+                        <label for="id">ID</label>
+                        <input type="number" class="form-control" id="id" name="id" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group my-2">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group my-2">
+                        <label for="ciudad">Ciudad</label>
+                        <input type"text" class="form-control" id="ciudad" name="ciudad" />
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group my-2">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" name="direccion" />
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-4 offset-4">
+                    <div class="form-group my-2">
+                        <input type="submit" class="btn btn-outline-primary w-100" value="GUARDAR" id="btnGuardar" />
+                    </div>
+                </div>
+            </div
+        </form>
+    </div>
+</div>
+
+
+<div class="mt-3">
+    <h4>Registros</h4>
+    <div class="table-responsive ">
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Ciudad</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+            </thead>
+            <tbody id="tablaRegistros">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="btn-group-sm">
+                        <button class="btn btn-danger">Eliminar</button>
+                        <button class="btn btn-warning">Editar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="~/js/sede.js"></script>
