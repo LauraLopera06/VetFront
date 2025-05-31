@@ -24,30 +24,31 @@
                 <div class="col-md-3">
                     <div class="form-group my-2">
                         <label for="nombre">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" />
+                        <input type="text" class="form-control" id="nombre" name="nombre" required />
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group my-2">
                         <label for="ciudad">Ciudad</label>
-                        <input type"text" class="form-control" id="ciudad" name="ciudad" />
+                        <input type"text" class="form-control" id="ciudad" name="ciudad" required />
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="form-group my-2">
                         <label for="direccion">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" name="direccion" />
+                        <input type="text" class="form-control" id="direccion" name="direccion" required />
                     </div>
                 </div>
             </div>
             <div>
                 <div class="col-md-4 offset-4">
-                    <div class="form-group my-2">
-                        <input type="submit" class="btn btn-outline-primary w-100" value="GUARDAR" id="btnGuardar" />
+                    <div class="form-group my-2 text-center">
+                        <input type="submit" class="btn btn-outline-primary" value="GUARDAR" id="btnGuardar" />
+                        <input type="reset" class="btn btn-outline-secondary" value="LIMPIAR" id="btnGuardar" />
                     </div>
                 </div>
-            </div
+            </div>
         </form>
     </div>
 </div>
@@ -65,16 +66,6 @@
                 <th>Acciones</th>
             </thead>
             <tbody id="tablaRegistros">
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="btn-group-sm">
-                        <button class="btn btn-danger">Eliminar</button>
-                        <button class="btn btn-warning">Editar</button>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </div>

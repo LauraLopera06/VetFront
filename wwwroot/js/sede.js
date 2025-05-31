@@ -1,38 +1,78 @@
-﻿const URL_API = 'https://api-veterinaria.runasp.net/api';
+﻿class Sede {
+    constructor(id, nombre, ciudad, direccion) {
+        this.id = id || null;
+        this.nombre = nombre || null;
+        this.ciudad = ciudad || null;
+        this.direccion = direccion || null;
+    }
+}
 
+let sede = new Sede();
 let registros = [];
 
 const guardarFormulario = async () => {
     document.getElementById("btnGuardar").disabled = true;
 
-    const data = {
-        id: document.getElementById("id").value,
-        nombre: document.getElementById("nombre").value,
-        ciudad: document.getElementById("ciudad").value,
-        direccion: document.getElementById("direccion").value
-    }
+    sede = new Sede(
+        document.getElementById('id').value,
+        document.getElementById('nombre').value,
+        document.getElementById('ciudad').value,
+        document.getElementById('direccion').value
+    );
 
-    await fetch(`${URL_API}/Sede/Insertar`, {
+    if (sede.id) {
+        await actualizarRegistro(sede);
+    } else {
+        await insertarRegistro(sede);
+    }
+}
+
+const actualizarRegistro = async (sede) => {
+    await fetch(`${API_BASE_URL}/Sede/Actualizar?idSede=${sede.id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(sede)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    })
+    .finally(() => {
+        document.getElementById("btnGuardar").disabled = false;
+        cargarDatos();
+    });
+}
+
+const insertarRegistro = async (sede) => {
+    await fetch(`${API_BASE_URL}/Sede/Insertar`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(sede)
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        })
-        .finally(() => {
-            document.getElementById("btnGuardar").disabled = false;
-            cargarDatos();
-        });
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    })
+    .finally(() => {
+        document.getElementById("btnGuardar").disabled = false;
+        cargarDatos();
+    });
 }
 
 const cargarDatos = async () => {
+    registros = [];
     fetch(`${API_BASE_URL}/Sede/ConsultarTodos`, {
         method: 'GET',
         headers: {
@@ -40,22 +80,33 @@ const cargarDatos = async () => {
             'Authorization': `Bearer ${token}`
         }
     })
-        .then(response => {
-            if (response.status !== 200) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Sedes consultadas correctamente:', data);
-        })
-        .catch(error => {
-            console.error('Error consultando sedes:', error);
+    .then(response => {
+        if (response.status !== 200) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Sedes consultadas correctamente:', data);
+        data.forEach(function (item) {
+            registros.push(new Sede(
+                item.id,
+                item.nombre,
+                item.ciudad,
+                item.direccion
+            ));
         });
+        mostrarDatos();
+    })
+    .catch(error => {
+        console.error('Error consultando sedes:', error);
+    });
 }
 
 const mostrarDatos = () => {
-    registros.registros(function () {
+
+    document.getElementById("tablaRegistros").innerHTML = '';
+    registros.forEach(function (registro) {
         const fila = document.createElement("tr");
         fila.innerHTML = `
             <td>${registro.id}</td>
@@ -63,8 +114,8 @@ const mostrarDatos = () => {
             <td>${registro.ciudad}</td>
             <td>${registro.direccion}</td>
             <td>
-                <button class="btn btn-warning" onclick="editarRegistro(${registro.id})">Editar</button>
-                <button class="btn btn-danger" onclick="eliminarRegistro(${registro.id})">Eliminar</button>
+                <button class="btn btn-warning btn-sm" onclick="editarRegistro(${registro.id})">Editar</button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarRegistro(${registro.id})">Eliminar</button>
             </td>
         `;
         document.getElementById("tablaRegistros").appendChild(fila);
@@ -87,15 +138,17 @@ const eliminarRegistro = async (id) => {
         return;
     }
     
-    await fetch(`${URL_API}/Sede/Eliminar?idSede=${id}`, {
+    await fetch(`${API_BASE_URL}/Sede/Eliminar?idSede=${id}`, {
         method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         }
     })
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        alert("Eliminado");
         cargarDatos();
     })
     .catch(error => {
