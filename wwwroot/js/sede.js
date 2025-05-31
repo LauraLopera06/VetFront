@@ -49,9 +49,8 @@ const cargarDatos = async () => {
         });
 }
 
-const mostrarDatosmostrarDatos = () => 
-    document.getElementById("tablaRegistros").appendChild(fila);
-    registros.forEach(function () {
+const mostrarDatos = () => {
+    registros.registros(function () {
         const fila = document.createElement("tr");
         fila.innerHTML = `
             <td>${registro.id}</td>
