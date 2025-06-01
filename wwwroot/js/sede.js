@@ -33,19 +33,24 @@ const guardarFormulario = async () => {
 }
 
 const cargarDatos = async () => {
-    await fetch(`${URL_API}/Sede/ConsultarTodos`, {
+    fetch(`${API_BASE_URL}/Sede/ConsultarTodos`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status !== 200) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
-            registros = data;
-            mostrarDatos();
+            console.log('Sedes consultadas correctamente:', data);
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error consultando sedes:', error);
         });
 }
 
@@ -98,6 +103,6 @@ const eliminarRegistro = async (id) => {
     });
 }
 
-window.onload = () => {
-    cargarDatos();
+window.onload = async () => {
+    await cargarDatos();
 };
