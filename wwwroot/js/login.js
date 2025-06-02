@@ -38,3 +38,5 @@
             alert(error);
         })
 }
+
+localStorage.clear();
