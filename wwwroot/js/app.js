@@ -1,2 +1,2 @@
-﻿const API_BASE_URL = 'https://api-veterinaria.runasp.net/api';
+﻿const API_BASE_URL = 'https://localhost:44319/api';
 let token = localStorage.getItem('token');
