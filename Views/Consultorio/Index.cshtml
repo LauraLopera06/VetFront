@@ -8,7 +8,7 @@
 
 
 <div class="container py-5">
-    
+
     <div class="text-center mb-4">
         <h1 class="header-title">Consultorio</h1>
         <p class="lead text-secondary">
@@ -16,7 +16,7 @@
         </p>
     </div>
 
-  
+
     <div class="card mb-4 shadow-sm">
         <div class="card-header bg-primary text-white fs-5 fw-bold">
             <i class="bi bi-clipboard-plus me-2"></i>Crear o Editar Consultorio
@@ -25,13 +25,13 @@
             <form id="frmConsultorio" onsubmit="event.preventDefault(); guardarFormulario();">
                 <div class="row g-3">
 
-                  
+
                     <div class="col-md-4">
                         <label for="id" class="form-label">ID Consultorio</label>
                         <input type="number" class="form-control" id="id" name="id" placeholder="1" />
                     </div>
 
-                   
+
                     <div class="col-md-4">
                         <label for="nombre" class="form-label">Nombre</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Patitas Felices" required />
@@ -40,8 +40,8 @@
                     <!-- Sede -->
                     <div class="col-md-4">
                         <label for="sede_id" class="form-label">Sede</label>
-                        <input type="number" class="form-control" id="sede_id" name="sede_id" placeholder="1"/>
-         
+                        <input type="number" class="form-control" id="sede_id" name="sede_id" placeholder="1" />
+
                     </div>
                 </div>
 
@@ -58,7 +58,7 @@
         </div>
     </div>
 
-    
+
     <div class="card shadow-sm">
         <div class="card-header bg-info text-white fs-5 fw-bold">
             <i class="bi bi-list-ul me-2"></i>Registros de Consultorios
@@ -74,12 +74,12 @@
                     </tr>
                 </thead>
                 <tbody id="tablaRegistros">
-                
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/app.js"></script>
