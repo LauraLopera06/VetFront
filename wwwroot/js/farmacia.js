@@ -1,10 +1,11 @@
 ﻿class Farmacia {
-    constructor(id, nombre, telefono, direccion, sede_id) {
+    constructor(id, nombre, telefono, direccion, sede_id, sede_nombre) {
         this.id = id || null;
         this.nombre = nombre || null;
         this.telefono = telefono || null;
         this.direccion = direccion || null;
         this.sede_id = sede_id || null;
+        this.sede_nombre = sede_nombre || null;
     }
 }
 
@@ -96,7 +97,8 @@ const cargarDatosFarmacia = async () => {
                     item.nombre,
                     item.telefono,
                     item.direccion,
-                    item.sede_id
+                    item.sede_id,
+                    item.Sede.nombre
                 ));
             });
             mostrarDatosFarmacia();
@@ -115,7 +117,7 @@ const mostrarDatosFarmacia = () => {
             <td>${registro.nombre}</td>
             <td>${registro.telefono}</td>
             <td>${registro.direccion}</td>
-            <td>${registro.sede_id}</td>
+            <td>${registro.sede_nombre}</td>
             <td>
                 <button class="btn btn-warning btn-sm" onclick="editarRegistroFarmacia(${registro.id})">Editar</button>
                 <button class="btn btn-danger btn-sm" onclick="eliminarRegistroFarmacia(${registro.id})">Eliminar</button>
@@ -159,7 +161,39 @@ const eliminarRegistroFarmacia = async (id) => {
         });
 }
 
+const cargarProveedores = async () => {
+    registros = [];
+    fetch(`${API_BASE_URL}/Sede/ConsultarTodos`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            if (response.status !== 200) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+
+            if (data.length) {
+                let opciones = '<option value="">Seleccione una sede</option>';
+                data.forEach(function (item) {
+                    opciones += `<option value="${item.id}">${item.nombre}</option>`;
+                });
+
+                document.getElementById('sede_id').innerHTML = opciones;
+            }
+        })
+        .catch(error => {
+            console.error('Error consultando medicamento:', error);
+        });
+}
+
 window.onload = async () => {
     await cargarDatosFarmacia();
+    await cargarProveedores();
 };
 
