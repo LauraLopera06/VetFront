@@ -89,7 +89,7 @@ const cargarDatos = async () => {
     .then(data => {
         console.log('Herramientas consultadas correctamente:', data);
         data.forEach(function (item) {
-            registros.push(new Medicamento(
+            registros.push(new Herramienta(
                 item.id,
                 item.nombre,
                 item.tipo,
