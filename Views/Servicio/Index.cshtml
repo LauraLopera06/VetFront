@@ -1,8 +1,28 @@
-﻿@{
-    ViewData["Title"] = "Servicio Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Servicio</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+﻿<div class="card mt-4">
+    <div class="card-header fw-bold">
+        Listado de Servicios
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha Ingreso</th>
+                    <th>Fecha Salida</th>
+                    <th>Mascota ID</th>
+                    <th>Empleado ID</th>
+                    <th>Consultorio ID</th>
+                    <th>Tipo Servicio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaRegistros">
+                <!-- Los registros se cargarán aquí dinámicamente -->
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<script src="~/js/app.js"></script>
+<script src="~/js/sesion.js"></script>
+<script src="~/js/servicio.js"></script>
