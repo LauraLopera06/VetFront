@@ -9,7 +9,7 @@
 <div class="container py-5">
 
     <div class="text-center mb-4">
-        <h1 class="display-4">Consultorios</h1>
+        <h1 class="display-4">Consultorio</h1>
         <p class="lead text-secondary">Comprometidos con la vida, el cuidado y la salud de tus mascotas.</p>
     </div>
 
@@ -32,9 +32,16 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label for="sede_id" class="form-label">ID de la Sede</label>
-                        <input type="number" class="form-control" id="sede_id" name="sede_id" placeholder="Ingrese el ID de la sede" required>
+                        <label for="sede_id" class="form-label">Sede</label>
+                        <select class="form-select" id="sede_id" name="sede_id" required>
+                            <option value="" selected disabled>Seleccione una sede</option>
+                            <option value="3">Salitre</option>
+                            <option value="4">Niquitao</option>
+                            <option value="5">La Cuatro Sur</option>
+                            <option value="6">veterinary</option>
+                        </select>
                     </div>
+
 
                 </div>
 
