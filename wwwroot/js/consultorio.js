@@ -3,7 +3,6 @@
         this.id = id || null;
         this.nombre = nombre || null;
         this.sede_id = sede_id || null;
-
     }
 }
 
@@ -24,7 +23,7 @@ const guardarFormulario = async () => {
     } else {
         await insertarRegistro(consultorio);
     }
-}
+};
 
 const actualizarRegistro = async (consultorio) => {
     await fetch(`${API_BASE_URL}/Consultorio/Actualizar?idConsultorio=${consultorio.id}`, {
@@ -40,13 +39,13 @@ const actualizarRegistro = async (consultorio) => {
             console.log(data);
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error al actualizar:', error);
         })
         .finally(() => {
             document.getElementById("btnGuardar").disabled = false;
             cargarDatos();
         });
-}
+};
 
 const insertarRegistro = async (consultorio) => {
     await fetch(`${API_BASE_URL}/Consultorio/Insertar`, {
@@ -62,33 +61,16 @@ const insertarRegistro = async (consultorio) => {
             console.log(data);
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error al insertar:', error);
         })
         .finally(() => {
             document.getElementById("btnGuardar").disabled = false;
             cargarDatos();
         });
-}
+};
 
 const cargarDatos = async () => {
     registros = [];
-    // Primero cargamos las sedes para llenar el dropdown
-    const sedesResponse = await fetch(`${API_BASE_URL}/Sede/ConsultarTodos`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    });
-
-    if (sedesResponse.ok) {
-        const sedes = await sedesResponse.json();
-        llenarDropdownSedes(sedes);
-    } else {
-        console.error("Error cargando sedes");
-    }
-
-    // Luego cargamos los consultorios
     fetch(`${API_BASE_URL}/Consultorio/ConsultarTodos`, {
         method: 'GET',
         headers: {
@@ -103,60 +85,46 @@ const cargarDatos = async () => {
             return response.json();
         })
         .then(data => {
-            console.log('Consultorios consultados correctamente:', data);
-            data.forEach(function (item) {
+            console.log('Consultorios cargados:', data);
+            data.forEach(item => {
                 registros.push(new Consultorio(
                     item.id,
                     item.nombre,
-                    item.sede_id,
-                    item.nombre_sede // asumiendo que la API retorna también el nombre de la sede para mostrarlo
+                    item.sede_id
                 ));
             });
             mostrarDatos();
         })
         .catch(error => {
-            console.error('Error consultando consultorios:', error);
+            console.error('Error al cargar consultorios:', error);
         });
-}
-
-const llenarDropdownSedes = (sedes) => {
-    const select = document.getElementById('sede_id');
-    select.innerHTML = '<option value="">Seleccione una sede</option>';
-    sedes.forEach(sede => {
-        const option = document.createElement('option');
-        option.value = sede.id;
-        option.textContent = sede.nombre;
-        select.appendChild(option);
-    });
-}
+};
 
 const mostrarDatos = () => {
-    const tabla = document.getElementById("tablaRegistrosConsultorio");
-    tabla.innerHTML = '';
-
-    registros.forEach(function (registro) {
+    document.getElementById("tablaRegistros").innerHTML = '';
+    registros.forEach(registro => {
         const fila = document.createElement("tr");
         fila.innerHTML = `
             <td>${registro.id}</td>
             <td>${registro.nombre}</td>
-            <td>${registro.nombre_sede || ''}</td>
+            <td>${registro.sede_id}</td>
             <td>
-                <button class="btn btn-warning btn-sm" onclick="editarRegistroConsultorio(${registro.id})">Editar</button>
-                <button class="btn btn-danger btn-sm" onclick="eliminarRegistroConsultorio(${registro.id})">Eliminar</button>
+                <button class="btn btn-warning btn-sm" onclick="editarRegistro(${registro.id})">Editar</button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarRegistro(${registro.id})">Eliminar</button>
             </td>
         `;
-        tabla.appendChild(fila);
+        document.getElementById("tablaRegistros").appendChild(fila);
     });
-}
+};
 
-const editarRegistro = async (id) => {
-    const registro = registros.find(r => r.id === id);
+const editarRegistro = (id) => {
+    const registro = registros.find(r => r.id == id);
     if (registro) {
         document.getElementById("id").value = registro.id;
         document.getElementById("nombre").value = registro.nombre;
         document.getElementById("sede_id").value = registro.sede_id;
     }
-}
+};
 
 const eliminarRegistro = async (id) => {
     if (!confirm("¿Estás seguro de que deseas eliminar este consultorio?")) {
@@ -173,14 +141,15 @@ const eliminarRegistro = async (id) => {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            alert("Consultorio eliminado");
+            alert("Eliminado correctamente");
             cargarDatos();
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error al eliminar:', error);
         });
-}
+};
 
 window.onload = async () => {
     await cargarDatos();
 };
+
