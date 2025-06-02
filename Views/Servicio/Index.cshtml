@@ -1,25 +1,96 @@
-﻿<div class="card mt-4">
+﻿<div class="card">
     <div class="card-header fw-bold">
-        Listado de Servicios
+        Formulario de Servicio
     </div>
     <div class="card-body">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Fecha Ingreso</th>
-                    <th>Fecha Salida</th>
-                    <th>Mascota ID</th>
-                    <th>Empleado ID</th>
-                    <th>Consultorio ID</th>
-                    <th>Tipo Servicio</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaRegistros">
-                <!-- Los registros se cargarán aquí dinámicamente -->
-            </tbody>
-        </table>
+        <form id="formServicio" onsubmit="event.preventDefault(); guardarFormulario();">
+            <input type="hidden" id="id">
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <label for="ingreso" class="form-label">Fecha de Ingreso</label>
+                        <input type="datetime-local" class="form-control" id="ingreso" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <label for="salida" class="form-label">Fecha de Salida</label>
+                        <input type="datetime-local" class="form-control" id="salida" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <label for="mascota_id" class="form-label">Mascota (ID)</label>
+                        <input type="number" class="form-control" id="mascota_id" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <label for="empleado_id" class="form-label">Empleado (ID)</label>
+                        <input type="number" class="form-control" id="empleado_id" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="consultorio_id" class="form-label">Consultorio (ID)</label>
+                        <input type="number" class="form-control" id="consultorio_id" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="tipoServicio_id" class="form-label">Tipo de Servicio</label>
+                        <select class="form-select" id="tipoServicio_id" required>
+                            <option value="">Cargando tipos...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100" id="btnGuardar">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+        <span>Registros de Servicios</span>
+        <button class="btn btn-sm btn-success" onclick="limpiarFormulario()">
+            <i class="fas fa-plus"></i> Nuevo Servicio
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Ingreso</th>
+                        <th>Salida</th>
+                        <th>Mascota</th>
+                        <th>Empleado</th>
+                        <th>Consultorio</th>
+                        <th>Tipo Servicio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaRegistros">
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
