@@ -1,9 +1,10 @@
 ﻿class Herramienta {
-    constructor(id, nombre, tipo, proveedor_id) {
+    constructor(id, nombre, tipo, proveedor_id, proveedor_name) {
         this.id = id || null;
         this.nombre = nombre || null;
         this.tipo = tipo || null;
         this.proveedor_id = proveedor_id || null;
+        this.proveedor_name = proveedor_name || null;
     }
 }
 
@@ -93,7 +94,8 @@ const cargarDatos = async () => {
                 item.id,
                 item.nombre,
                 item.tipo,
-                item.proveedor_id
+                item.proveedor_id,
+                item.Proveedor.nombre
             ));
         });
         mostrarDatos();
@@ -112,7 +114,7 @@ const mostrarDatos = () => {
             <td>${registro.id}</td>
             <td>${registro.nombre}</td>
             <td>${registro.tipo}</td>
-            <td>${registro.proveedor_id}</td>
+            <td>${registro.proveedor_name}</td>
             <td>
                 <button class="btn btn-warning btn-sm" onclick="editarRegistro(${registro.id})">Editar</button>
                 <button class="btn btn-danger btn-sm" onclick="eliminarRegistro(${registro.id})">Eliminar</button>
@@ -156,6 +158,38 @@ const eliminarRegistro = async (id) => {
     });
 }
 
+const cargarProveedores = async () => {
+    registros = [];
+    fetch(`${API_BASE_URL}/Proveedor/ConsultarTodos`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            if (response.status !== 200) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+
+            if (data.length) {
+                let opciones = '<option value="">Seleccione un proveedor</option>';
+                data.forEach(function (item) {
+                    opciones += `<option value="${item.id}">${item.nombre}</option>`;
+                });
+
+                document.getElementById('proveedor_id').innerHTML = opciones;
+            }
+        })
+        .catch(error => {
+            console.error('Error consultando medicamento:', error);
+        });
+}
+
 window.onload = async () => {
     await cargarDatos();
+    await cargarProveedores();
 };

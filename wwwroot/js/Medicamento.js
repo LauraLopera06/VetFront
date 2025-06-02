@@ -172,26 +172,26 @@ const cargarProveedores = async () => {
             'Authorization': `Bearer ${token}`
         }
     })
-        .then(response => {
-            if (response.status !== 200) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
+    .then(response => {
+        if (response.status !== 200) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
 
-            if (data.length) {
-                let opciones = '<option value="">Seleccione un proveedor</option>';
-                data.forEach(function (item) {
-                    opciones += `<option value="${item.id}">${item.nombre}</option>`;
-                });
+        if (data.length) {
+            let opciones = '<option value="">Seleccione un proveedor</option>';
+            data.forEach(function (item) {
+                opciones += `<option value="${item.id}">${item.nombre}</option>`;
+            });
 
-                document.getElementById('proveedor_id').innerHTML = opciones;
-            }
-        })
-        .catch(error => {
-            console.error('Error consultando medicamento:', error);
-        });
+            document.getElementById('proveedor_id').innerHTML = opciones;
+        }
+    })
+    .catch(error => {
+        console.error('Error consultando medicamento:', error);
+    });
 }
 
 window.onload = async () => {
