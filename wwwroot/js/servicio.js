@@ -83,7 +83,7 @@ async function cargarDatosAdicionales() {
                 'Authorization': `Bearer ${token}`
             }
         });
-        listaMascotas = await responseMascotas.json();
+        mascotas = await responseMascotas.json();
 
         // Cargar empleados
         const responseEmpleados = await fetch(`${API_BASE_URL}/Empleado/ConsultarTodos`, {
@@ -91,7 +91,7 @@ async function cargarDatosAdicionales() {
                 'Authorization': `Bearer ${token}`
             }
         });
-        listaEmpleados = await responseEmpleados.json();
+        empleado = await responseEmpleados.json();
     } catch (error) {
         console.error('Error cargando datos adicionales:', error);
     }
