@@ -1,8 +1,99 @@
-﻿@{
-    ViewData["Title"] = "Cita Page";
-}
+﻿<div class="card">
+    <div class="card-header fw-bold">
+        Formulario de citas medicas
+    </div>
+    <div class="card-body">
+        <form id="formServicio" onsubmit="event.preventDefault(); guardarFormulario();">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group mb-3">
+                        <label for="id" class="form-label">ID Servicio</label>
+                        <input type="number" class="form-control" id="id">
+                    </div>
+                </div>
+            </div>
 
-<div class="text-center">
-    <h1 class="display-4">Cita</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="fecha" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <label for="motivo" class="form-label">Motivo</label>
+                        <input type="text" class="form-control" id="motivo" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <label for="mascota_id" class="form-label">Mascota (ID)</label>
+                        <input type="number" class="form-control" id="mascota_id" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <label for="empleado_id" class="form-label">Empleado</label>
+                        <select class="form-select" id="empleado_id" required>
+                            <option value="">Cargando empleados...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="sede_id" class="form-label">Sede</label>
+                        <select class="form-select" id="sede_id" required>
+                            <option value="">Cargando sedes...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <div class="form-group my-2 text-center">
+                        <input type="submit" class="btn btn-outline-primary" value="GUARDAR" id="btnGuardar" />
+                        <input type="reset" class="btn btn-outline-secondary" value="LIMPIAR" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+
+<div class="card mt-4">
+    <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+        <span>Cronograma de citas</span>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Motivo</th>
+                        <th>Mascota</th>
+                        <th>Empleado</th>
+                        <th>Sede</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCronograma">
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/app.js"></script>
+<script src="~/js/sesion.js"></script>
+<script src="~/js/cita.js"></script>
