@@ -163,7 +163,7 @@ function limpiarFormulario() {
     document.getElementById('formServicio').reset();
     document.getElementById('id').value = '';
     servicioActual = new Servicio();
-    document.getElementById('ingreso').focus();
+    document.getElementById('fecha_ingreso').focus();
 }
 
 async function editarServicio(id) {
@@ -181,8 +181,8 @@ async function editarServicio(id) {
 
         // Llenar formulario
         document.getElementById('id').value = servicio.id;
-        document.getElementById('ingreso').value = servicio.fecha_ingreso.slice(0, 16);
-        document.getElementById('salida').value = servicio.fecha_salida.slice(0, 16);
+        document.getElementById('fecha_ingreso').value = servicio.fecha_ingreso.slice(0, 16);
+        document.getElementById('fecha_salida').value = servicio.fecha_salida.slice(0, 16);
         document.getElementById('mascota_id').value = servicio.mascota_id;
         document.getElementById('empleado_id').value = servicio.empleado_id;
         document.getElementById('consultorio_id').value = servicio.consultorio_id;
@@ -196,48 +196,96 @@ async function editarServicio(id) {
     }
 }
 
-async function guardarFormulario() {
-    const btnGuardar = document.getElementById('btnGuardar');
-    btnGuardar.disabled = true;
-    btnGuardar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+// Función principal que decide si guardar o actualizar
+const guardarFormulario = async () => {
+    document.getElementById("btnGuardar").disabled = true;
+    document.getElementById("btnGuardar").innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
 
     try {
         // Crear objeto servicio
-        const servicio = {
-            id: document.getElementById('id').value || null,
-            fecha_ingreso: document.getElementById('ingreso').value,
-            fecha_salida: document.getElementById('salida').value,
-            mascota_id: document.getElementById('mascota_id').value,
-            empleado_id: document.getElementById('empleado_id').value,
-            consultorio_id: document.getElementById('consultorio_id').value,
-            tipoServicio_id: document.getElementById('tipoServicio_id').value
-        };
+        const servicio = new Servicio(
+            document.getElementById('id').value || null,
+            document.getElementById('fecha_ingreso').value,
+            document.getElementById('fecha_salida').value,
+            document.getElementById('mascota_id').value,
+            document.getElementById('empleado_id').value,
+            document.getElementById('consultorio_id').value,
+            document.getElementById('tipoServicio_id').value
+        );
 
-        const url = servicio.id ? `${API_BASE_URL}/Servicio/Actualizar` : `${API_BASE_URL}/Servicio/Insertar`;
-        const method = servicio.id ? 'PUT' : 'POST';
-
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(servicio)
-        });
-
-        if (!response.ok) throw new Error('Error al guardar servicio');
-
-        const result = await response.json();
-        alert(`Servicio ${servicio.id ? 'actualizado' : 'creado'} correctamente`);
-        limpiarFormulario();
-        await cargarDatos();
+        if (servicio.id) {
+            await actualizarRegistro(servicio);
+        } else {
+            await insertarRegistro(servicio);
+        }
     } catch (error) {
-        console.error('Error:', error);
-        alert('Error al guardar servicio: ' + error.message);
-    } finally {
-        btnGuardar.disabled = false;
-        btnGuardar.innerHTML = '<i class="fas fa-save"></i> Guardar';
+        console.error('Error en guardarFormulario:', error);
+        alert('Error al procesar el formulario: ' + error.message);
     }
+}
+
+// Función para insertar nuevo registro
+const insertarRegistro = async (servicio) => {
+    await fetch(`${API_BASE_URL}/Servicio/Insertar`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(servicio)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Servicio creado:', data);
+            alert('Servicio creado correctamente');
+            limpiarFormulario();
+        })
+        .catch(error => {
+            console.error('Error al insertar:', error);
+            alert('Error al crear servicio: ' + error.message);
+        })
+        .finally(() => {
+            document.getElementById("btnGuardar").disabled = false;
+            document.getElementById("btnGuardar").innerHTML = '<i class="fas fa-save"></i> Guardar';
+            cargarDatos();
+        });
+}
+
+// Función para actualizar registro existente
+const actualizarRegistro = async (servicio) => {
+    await fetch(`${API_BASE_URL}/Servicio/Actualizar?id=${servicio.id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(servicio)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Servicio actualizado:', data);
+            alert('Servicio actualizado correctamente');
+            limpiarFormulario();
+        })
+        .catch(error => {
+            console.error('Error al actualizar:', error);
+            alert('Error al actualizar servicio: ' + error.message);
+        })
+        .finally(() => {
+            document.getElementById("btnGuardar").disabled = false;
+            document.getElementById("btnGuardar").innerHTML = '<i class="fas fa-save"></i> Guardar';
+            cargarDatos();
+        });
 }
 
 async function confirmarEliminar(id) {
