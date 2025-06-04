@@ -1,11 +1,14 @@
 ﻿class Cita {
-    constructor(id, fecha, motivo, mascota_id, empleado_id, sede_id) {
+    constructor(id, fecha, motivo, mascota_id, empleado_id, sede_id, empleado_nombre, mascota_nombre, sede_nombre) {
         this.id = id || null;
         this.fecha = fecha || null;
         this.motivo = motivo || null;
         this.mascota_id = mascota_id || null;
         this.empleado_id = empleado_id || null;
         this.sede_id = sede_id || null;
+        this.sede_nombre = sede_nombre || null;
+        this.mascota_nombre = mascota_nombre || null;
+        this.empleado_nombre = empleado_nombre || null;
     }
 }
 
@@ -145,7 +148,10 @@ const cargarDatos = async () => {
                     item.motivo,
                     item.mascota_id,
                     item.empleado_id,
-                    item.sede_id
+                    item.sede_id,
+                    item.Empleado.nombre,
+                    item.Mascota.nombre,
+                    item.Sede.nombre
                 ));
             });
             mostrarDatos();
@@ -184,9 +190,9 @@ const mostrarDatos = () => {
                 <td>${registro.id}</td>
                 <td>${new Date(registro.fecha).toLocaleTimeString()}</td>
                 <td>${registro.motivo}</td>
-                <td>${registro.mascota_id}</td>
-                <td>${getNombreEmpleado(registro.empleado_id)}</td>
-                <td>${getNombreSede(registro.sede_id)}</td>
+                <td>${registro.mascota_nombre}</td>
+                <td>${registro.empleado_nombre}</td>
+                <td>${registro.sede_nombre}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editarRegistro(${registro.id})">Editar</button>
                     <button class="btn btn-danger btn-sm" onclick="eliminarRegistro(${registro.id})">Eliminar</button>
