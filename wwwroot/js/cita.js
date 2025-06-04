@@ -14,11 +14,9 @@ let registros = [];
 
 const verificarDisponibilidad = async (empleado_id, fecha, cita_id = null) => {
     try {
-        // Formatea la fecha correctamente (YYYY-MM-DD)
-        const fechaFormateada = new Date(fecha).toISOString().split('T')[0];
 
         const response = await fetch(
-            `${API_BASE_URL}/Cita/ConsultarPorEmpleadoYFecha?empleadoId=${empleado_id}&fecha=${fechaFormateada}`, {
+            `${API_BASE_URL}/Cita/ConsultarPorEmpleadoYFecha?idEmpleado=${empleado_id}&fecha=${fecha}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -110,6 +108,9 @@ const insertarRegistro = async (cita) => {
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            if (data == 0) {
+                alert("No se pudo realizar el registro, verifique los datos.");
+            }
         })
         .catch(error => {
             console.error('Error:', error);
