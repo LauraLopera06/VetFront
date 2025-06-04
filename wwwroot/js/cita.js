@@ -13,21 +13,35 @@ let cita = new Cita();
 let registros = [];
 
 const verificarDisponibilidad = async (empleado_id, fecha, cita_id = null) => {
-    const response = await fetch(`${API_BASE_URL}/Cita/ConsultarPorEmpleadoYFecha?empleadoId=${empleado_id}&fecha=${fecha}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+    try {
+        // Formatea la fecha correctamente (YYYY-MM-DD)
+        const fechaFormateada = new Date(fecha).toISOString().split('T')[0];
+
+        const response = await fetch(
+            `${API_BASE_URL}/Cita/ConsultarPorEmpleadoYFecha?empleadoId=${empleado_id}&fecha=${fechaFormateada}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
         }
-    });
 
-    const citas = await response.json();
+        const citas = await response.json();
 
-    if (cita_id) {
-        return citas.filter(c => c.id !== cita_id).length === 0;
+        // Si estamos editando, ignoramos la cita actual
+        if (cita_id) {
+            return citas.filter(c => c.id != cita_id).length === 0;
+        }
+
+        return citas.length === 0;
+    } catch (error) {
+        console.error('Error verificando disponibilidad:', error);
+        return false; // Por defecto asumimos que no está disponible si hay error
     }
-
-    return citas.length === 0;
 };
 
 const guardarFormulario = async () => {
@@ -247,7 +261,7 @@ const cargarEmpleados = async () => {
             return response.json();
         })
         .then(data => {
-
+            empleadosCache = data;
             if (data.length) {
                 let opciones = '<option value="">Seleccione un empleado</option>';
                 data.forEach(function (item) {
@@ -260,7 +274,6 @@ const cargarEmpleados = async () => {
         .catch(error => {
             console.error('Error consultando empleado:', error);
         });
-    empleadosCache = data;
 }
 
 const cargarSedes = async () => {
@@ -279,7 +292,7 @@ const cargarSedes = async () => {
             return response.json();
         })
         .then(data => {
-
+            sedesCache = data;
             if (data.length) {
                 let opciones = '<option value="">Seleccione una sede</option>';
                 data.forEach(function (item) {
@@ -292,7 +305,6 @@ const cargarSedes = async () => {
         .catch(error => {
             console.error('Error consultando medicamento:', error);
         });
-    sedesCache = data;
 }
 
 const getNombreEmpleado = (id) => {
@@ -306,7 +318,7 @@ const getNombreSede = (id) => {
 }
 
 window.onload = async () => {
-    await cargarDatosFarmacia();
+    await cargarDatos();
     await cargarEmpleados();
     await cargarSedes();
 };
