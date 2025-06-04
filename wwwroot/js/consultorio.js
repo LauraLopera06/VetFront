@@ -1,8 +1,9 @@
 ﻿class Consultorio {
-    constructor(id, nombre, sede_id) {
+    constructor(id, nombre, sede_id, sede_nombre) {
         this.id = id || null;
         this.nombre = nombre || null;
         this.sede_id = sede_id || null;
+        this.sede_nombre = sede_nombre || null;
     }
 }
 
@@ -90,7 +91,8 @@ const cargarDatos = async () => {
                 registros.push(new Consultorio(
                     item.id,
                     item.nombre,
-                    item.sede_id
+                    item.sede_id,
+                    item.Sede.nombre
                 ));
             });
             mostrarDatos();
@@ -107,7 +109,7 @@ const mostrarDatos = () => {
         fila.innerHTML = `
             <td>${registro.id}</td>
             <td>${registro.nombre}</td>
-            <td>${registro.sede_id}</td>
+            <td>${registro.sede_nombre}</td>
             <td>
                 <button class="btn btn-warning btn-sm" onclick="editarRegistro(${registro.id})">Editar</button>
                 <button class="btn btn-danger btn-sm" onclick="eliminarRegistro(${registro.id})">Eliminar</button>
@@ -149,7 +151,39 @@ const eliminarRegistro = async (id) => {
         });
 };
 
+const cargarProveedores = async () => {
+    registros = [];
+    fetch(`${API_BASE_URL}/Sede/ConsultarTodos`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            if (response.status !== 200) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+
+            if (data.length) {
+                let opciones = '<option value="">Seleccione una sede</option>';
+                data.forEach(function (item) {
+                    opciones += `<option value="${item.id}">${item.nombre}</option>`;
+                });
+
+                document.getElementById('sede_id').innerHTML = opciones;
+            }
+        })
+        .catch(error => {
+            console.error('Error consultando medicamento:', error);
+        });
+}
+
 window.onload = async () => {
     await cargarDatos();
+    await cargarProveedores();
 };
 
